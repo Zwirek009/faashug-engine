@@ -28,6 +28,9 @@ terraform-autoapply:
 terraform-refresh:
 	terraform refresh
 
+terraform-output:
+	terraform output
+
 # INFO: Cloud Storage tfstate bucket and buckets with objects in them would not be destroyed
 terraform-destroy:
 	terraform destroy
