@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Read script arguments
+# Read script parameters
 while getopts ":m:" opt; do
   case $opt in
     m)
@@ -13,7 +13,16 @@ while getopts ":m:" opt; do
   esac
 done
 
-printf "Script will try to run for %d minutes!\n" "$execution_minutes"
+execution_seconds=$(($execution_minutes*60))
+echo "Script will try to run for ${execution_minutes} minutes" \
+    "== ${execution_seconds} seconds!" >&1
 
-# TODO Run and log for specified amount of time
+# Run and log for specified amount of time
+SECONDS=0
+while [ ${execution_seconds} -gt ${SECONDS} ]
+do
+    sleep 30
+    echo "${SECONDS}/${execution_seconds} seconds elapsed..." >&1
+done
 
+echo "SUCCESS --> ${execution_minutes} == ${execution_seconds} elapsed!" >&1
