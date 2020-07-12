@@ -13,7 +13,7 @@ OpenFaaS backend for my master's thesis project
 * Project with billing on GCP created
 * Project set as current/default in `gcloud` (verify using `gcloud config list`)
 
-### 2. Authorize `terraform`` to use your account GCP credentials
+### 2. Authorize terraform to use your account GCP credentials
 
 ```bash
 gcloud auth application-default login
