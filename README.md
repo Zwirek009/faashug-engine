@@ -31,3 +31,29 @@ Update command below using with your terraform outputs (eg. run `make terraform-
 ```bash
 gcloud container clusters get-credentials [PROJECT_ID]-gke --zone=[ZONE]
 ```
+
+## Docker Images
+
+Docker images definitions are stored in `images` folder
+
+### long-running-logger
+
+Container for testing long-lunning task execution. Container executes script for number of minutes passed as `-m` argument (or default 17 minutes if not specified), logging progress each 30 seconds.
+
+#### Build
+
+```bash
+docker build --no-cache -t long-running-logger images/long-running-logger
+```
+
+#### Run
+
+Using default execution time (default 17 minutes):
+```bash
+docker run -t long-running-logger
+```
+
+Using custom execution time (2 minutes on example below):
+```bash
+docker run -t long-running-logger -m 2
+```
