@@ -8,6 +8,7 @@ OpenFaaS backend for my master's thesis project
 
 * `terraform` installed, v0.12 or above
 * `gcloud` installed
+* `docker` installed
 * `kubectl` installed
 * Project with billing on GCP created
 * Project set as current/default in `gcloud` (verify using `gcloud config list`)
@@ -46,7 +47,7 @@ Container for testing long-lunning task execution. Container executes script for
 docker build --no-cache -t long-running-logger images/long-running-logger
 ```
 
-#### Run
+#### Run locally
 
 Using default execution time (default 17 minutes):
 ```bash
@@ -57,3 +58,11 @@ Using custom execution time (2 minutes on example below):
 ```bash
 docker run -t long-running-logger -m 2
 ```
+
+#### Push to registry
+
+Use [Semantic Versioning 2.0.0](https://semver.org/) for tagging new versions of the container
+
+* (optional) `gcloud auth configure-docker`
+* `docker tag long-running-logger eu.gcr.io/[PROJECT_ID]/long-running-logger:[NEW_SEMVER_TAG]`
+* `docker push eu.gcr.io/[PROJECT_ID]/long-running-logger:[NEW_SEMVER_TAG]`
