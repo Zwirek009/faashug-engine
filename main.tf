@@ -36,6 +36,12 @@ resource "google_project_service" "kubernetes_engine" {
   disable_dependent_services  = true
 }
 
+# Required by Cloud Run
+resource "google_project_service" "cloud_run" {
+  service                     = "run.googleapis.com"
+  disable_dependent_services  = true
+}
+
 # [GKE]
 resource "google_compute_network" "vpc" {
   count = var.gke_should_apply ? 1 : 0
@@ -105,4 +111,27 @@ resource "google_container_node_pool" "primary_nodes" {
       disable-legacy-endpoints = "true"
     }
   }
+}
+
+# [Cloud Run] Service definition
+resource "google_cloud_run_service" "long_running_logger" {
+  count = var.cloudrun_should_apply ? 1 : 0
+
+  name     = "${var.project_id}-long-running-logger-cloudrun"
+  location = var.cloudrun_region
+
+  template {
+    spec {
+      containers {
+        image = local.long_running_logger_image
+      }
+    }
+  }
+
+  traffic {
+    percent         = 100
+    latest_revision = true
+  }
+
+  depends_on = [google_project_service.cloud_run]
 }
