@@ -18,24 +18,25 @@ resource "google_project_service" "container_registry" {
   disable_dependent_services  = true
 }
 
-# Required by GKE module. Used for managing VPC etc.
-resource "google_project_service" "compute_engine" {
-  service                     = "compute.googleapis.com"
-  disable_dependent_services  = true
-}
-
-# Required by GKE module.
-resource "google_project_service" "kubernetes_engine" {
-  service                     = "container.googleapis.com"
-  disable_dependent_services  = true
-}
-
 resource "google_container_registry" "container_registry" {
   location    = var.multi_region_location
 
   depends_on  = [google_project_service.container_registry]
 }
 
+# [GKE] Required by GKE module. Used for managing VPC etc.
+resource "google_project_service" "compute_engine" {
+  service                     = "compute.googleapis.com"
+  disable_dependent_services  = true
+}
+
+# [GKE] Required by GKE module.
+resource "google_project_service" "kubernetes_engine" {
+  service                     = "container.googleapis.com"
+  disable_dependent_services  = true
+}
+
+# [GKE]
 resource "google_compute_network" "vpc" {
   name                    = "${var.project_id}-vpc"
   auto_create_subnetworks = "false"
@@ -43,6 +44,7 @@ resource "google_compute_network" "vpc" {
   depends_on  = [google_project_service.compute_engine]
 }
 
+# [GKE]
 resource "google_compute_subnetwork" "gke" {
   name            = "${var.project_id}-gke-subnet"
   ip_cidr_range   = "10.10.0.0/16"
@@ -50,7 +52,7 @@ resource "google_compute_subnetwork" "gke" {
   network         = google_compute_network.vpc.name
 }
 
-# GKE cluster
+# [GKE] Cluster definition 
 resource "google_container_cluster" "primary" {
   name     = "${var.project_id}-gke"
   location = var.zone
@@ -71,7 +73,7 @@ resource "google_container_cluster" "primary" {
   }
 }
 
-# Separately Managed Node Pool
+# [GKE] Separately Managed Node Pool
 resource "google_container_node_pool" "primary_nodes" {
   name       = "${google_container_cluster.primary.name}-node-pool"
   location   = var.zone
