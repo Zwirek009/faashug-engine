@@ -9,6 +9,6 @@ output "region" {
 }
 
 output "gke_cluster_name" {
-  value       = google_container_cluster.primary.name
+  value       = join(" ", google_container_cluster.primary.*.name)
   description = "GKE Cluster Name"
 }

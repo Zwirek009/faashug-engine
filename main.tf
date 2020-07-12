@@ -24,13 +24,13 @@ resource "google_container_registry" "container_registry" {
   depends_on  = [google_project_service.container_registry]
 }
 
-# [GKE] Required by GKE module. Used for managing VPC etc.
+# Required by GKE module. Used for managing VPC etc.
 resource "google_project_service" "compute_engine" {
   service                     = "compute.googleapis.com"
   disable_dependent_services  = true
 }
 
-# [GKE] Required by GKE module.
+# Required by GKE module.
 resource "google_project_service" "kubernetes_engine" {
   service                     = "container.googleapis.com"
   disable_dependent_services  = true
@@ -38,6 +38,8 @@ resource "google_project_service" "kubernetes_engine" {
 
 # [GKE]
 resource "google_compute_network" "vpc" {
+  count = var.gke_should_apply ? 1 : 0
+
   name                    = "${var.project_id}-vpc"
   auto_create_subnetworks = "false"
 
@@ -46,22 +48,26 @@ resource "google_compute_network" "vpc" {
 
 # [GKE]
 resource "google_compute_subnetwork" "gke" {
+  count = var.gke_should_apply ? 1 : 0
+
   name            = "${var.project_id}-gke-subnet"
   ip_cidr_range   = "10.10.0.0/16"
   region          = var.region
-  network         = google_compute_network.vpc.name
+  network         = google_compute_network.vpc[count.index].name
 }
 
 # [GKE] Cluster definition 
 resource "google_container_cluster" "primary" {
+  count = var.gke_should_apply ? 1 : 0
+
   name     = "${var.project_id}-gke"
   location = var.zone
 
   remove_default_node_pool = true
   initial_node_count       = 1
 
-  network    = google_compute_network.vpc.name
-  subnetwork = google_compute_subnetwork.gke.name
+  network    = google_compute_network.vpc[count.index].name
+  subnetwork = google_compute_subnetwork.gke[count.index].name
 
   master_auth {
     username = var.gke_username
@@ -75,9 +81,11 @@ resource "google_container_cluster" "primary" {
 
 # [GKE] Separately Managed Node Pool
 resource "google_container_node_pool" "primary_nodes" {
-  name       = "${google_container_cluster.primary.name}-node-pool"
+  count = var.gke_should_apply ? 1 : 0
+
+  name       = "${google_container_cluster.primary[count.index].name}-node-pool"
   location   = var.zone
-  cluster    = google_container_cluster.primary.name
+  cluster    = google_container_cluster.primary[count.index].name
   node_count = var.gke_num_nodes
 
   node_config {
@@ -91,7 +99,7 @@ resource "google_container_node_pool" "primary_nodes" {
       env = var.project_id
     }
 
-    machine_type = "n1-standard-1"
+    machine_type = var.gke_machine_type
     tags         = ["gke-node", "${var.project_id}-gke"]
     metadata = {
       disable-legacy-endpoints = "true"

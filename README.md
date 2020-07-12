@@ -24,7 +24,7 @@ gcloud auth application-default login
 * (first use setup) Run `make terraform-init`
 * Use Makefile (eg. `make terraform-apply`) to do actions instead of bare metal `terraform` actions
 
-### 4. Configure kubectl to use GKE zonal cluster
+### 4. (optional) Configure kubectl to use GKE zonal cluster
 
 Update command below using with your terraform outputs (eg. run `make terraform-output` to get them).
 

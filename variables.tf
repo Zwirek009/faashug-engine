@@ -1,21 +1,26 @@
 variable "project_id" {
-  type = string
+  type    = string
   default = "faashug-dev"
 }
 
 variable "region" {
-  type = string
+  type    = string
   default = "europe-west3"
 }
 
 variable "zone" {
-  type = string
+  type    = string
   default = "europe-west3-a"
 }
 
 variable "multi_region_location" {
-  type = string
+  type    = string
   default = "EU"
+}
+
+variable "gke_should_apply" {
+  default     = false
+  description = "Available options: 0 --> DEPLOY gke, 1 --> DO NOT DEPLOY gke"
 }
 
 variable "gke_username" {
@@ -30,5 +35,11 @@ variable "gke_password" {
 
 variable "gke_num_nodes" {
   default     = 1
+  description = "number of gke nodes"
+}
+
+variable "gke_machine_type" {
+  type = string
+  default     = "n1-standard-1"
   description = "number of gke nodes"
 }
