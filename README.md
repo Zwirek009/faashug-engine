@@ -16,7 +16,6 @@ OpenFaaS backend for my master's thesis project
 
 ```bash
 gcloud auth application-default login
-export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/[YOUR_GCP_ACCOUNT_MAIL]/adc.json
 ```
 
 ### 3. Apply changes to GCP
