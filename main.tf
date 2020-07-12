@@ -39,6 +39,8 @@ resource "google_container_registry" "container_registry" {
 resource "google_compute_network" "vpc" {
   name                    = "${var.project_id}-vpc"
   auto_create_subnetworks = "false"
+
+  depends_on  = [google_project_service.compute_engine]
 }
 
 resource "google_compute_subnetwork" "gke" {
