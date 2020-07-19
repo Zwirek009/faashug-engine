@@ -68,7 +68,7 @@ variable "long_running_logger_image_name" {
 
 variable "long_running_logger_image_tag" {
   type        = string
-  default     = "1.0.0"
+  default     = "1.0.1"
   description = "Tag of used long-running-logger (in SemVer 2.0.0 convention)"
 }
 
