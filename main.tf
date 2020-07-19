@@ -123,7 +123,7 @@ resource "google_cloud_run_service" "long_running_logger" {
   template {
     spec {
       containers {
-        image = local.long_running_logger_image
+        image = local.long_running_logger_cloudrun_image
       }
     }
   }

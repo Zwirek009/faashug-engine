@@ -68,10 +68,11 @@ variable "long_running_logger_image_name" {
 
 variable "long_running_logger_image_tag" {
   type        = string
-  default     = "2.0.0"
+  default     = "2.0.2"
   description = "Tag of used long-running-logger (in SemVer 2.0.0 convention)"
 }
 
 locals {
   long_running_logger_image = "${var.container_registry_location}/${var.project_id}/${var.long_running_logger_image_name}:${var.long_running_logger_image_tag}"
+  long_running_logger_cloudrun_image = "${var.container_registry_location}/${var.project_id}/${var.long_running_logger_image_name}:${var.long_running_logger_image_tag}-cloudrun"
 }
