@@ -39,7 +39,7 @@ Docker images definitions are stored in `images` folder
 
 ### long-running-logger
 
-Container for testing long-lunning task execution. Container executes script for number of minutes passed as `-m` argument (or default 17 minutes if not specified), logging progress each 30 seconds.
+Container for testing long-lunning task execution. Container executes script for number of minutes passed as EXECUTION_MINUTES env (default 1 minute), logging progress each 30 seconds.
 
 #### Build
 
@@ -49,14 +49,14 @@ docker build --no-cache -t long-running-logger images/long-running-logger
 
 #### Run locally
 
-Using default execution time (default 17 minutes):
+Using default execution time (default 1 minute):
 ```bash
 docker run -t long-running-logger
 ```
 
 Using custom execution time (2 minutes on example below):
 ```bash
-docker run -t long-running-logger -m 2
+docker run -t --env EXECUTION_MINUTES=2 long-running-logger
 ```
 
 #### Push to registry
