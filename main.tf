@@ -124,6 +124,19 @@ resource "google_cloud_run_service" "long_running_logger" {
     spec {
       containers {
         image = local.long_running_logger_cloudrun_image
+
+        env {
+          name  = var.long_running_logger_execution_minutes_env_name
+          value = var.long_running_logger_execution_minutes_env_value
+        }
+      }
+
+      timeout_seconds = var.cloudrun_timeout_seconds
+    }
+
+    metadata {
+      annotations = {
+        "autoscaling.knative.dev/maxScale" = "2"
       }
     }
   }

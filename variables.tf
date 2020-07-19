@@ -60,6 +60,12 @@ variable "cloudrun_region" {
   description = "Region for Cloud Run (fully managed) services"
 }
 
+variable "cloudrun_timeout_seconds" {
+  type = number
+  default = 900
+  description = "TimeoutSeconds for Cloud Run (fully managed) services (max 900 seconds as for 19.07.2020)"
+}
+
 variable "long_running_logger_image_name" {
   type        = string
   default     = "long-running-logger"
@@ -70,6 +76,18 @@ variable "long_running_logger_image_tag" {
   type        = string
   default     = "2.0.2"
   description = "Tag of used long-running-logger (in SemVer 2.0.0 convention)"
+}
+
+variable "long_running_logger_execution_minutes_env_name" {
+  type        = string
+  default     = "EXECUTION_MINUTES"
+  description = "long_running_logger_execution_minutes_env_name"
+}
+
+variable "long_running_logger_execution_minutes_env_value" {
+  type        = number
+  default     = 2
+  description = "long_running_logger_execution_minutes_env_value"
 }
 
 locals {
