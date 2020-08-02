@@ -1,0 +1,14 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://35.246.227.108:8080 # update value gateway address change
+functions:
+  long-running-logger:
+    lang: dockerfile
+    handler: ./long-running-logger
+    image: eu.gcr.io/faashug-dev/long-running-logger:2.0.2-openfaas
+    environment:
+      read_timeout: "100m"
+      write_timeout: "100m"
+      exec_timeout: "100m"
+

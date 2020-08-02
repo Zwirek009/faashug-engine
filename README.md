@@ -1,6 +1,6 @@
 # faashug-engine
 
-OpenFaaS backend for my master's thesis project
+Backend for my master's thesis project
 
 ## Deployment
 
@@ -43,6 +43,12 @@ Instructions below based on [official OpenFaaS workshop](https://github.com/open
 kubectl create clusterrolebinding "cluster-admin-$(whoami)" \
 --clusterrole=cluster-admin \
 --user="$(gcloud config get-value core/account)"
+```
+
+Command below installs OpenFaaS infra based on official OpenFaaS Helm chart. Timeout numbers can be changed as you wish, but remember that `upstreamTimeout` must be smaller than others. You can also rerun just the command to update timeout values on existing environment.
+
+```bash
+arkade install openfaas --set gateway.readTimeout="101m" --set gateway.writeTimeout="101m" --set gateway.upstreamTimeout="100m" --load-balancer
 ```
 
 Wait until command below reports success:
@@ -101,6 +107,7 @@ Container for testing long-lunning task execution. Container executes script for
 Specialized image version tags (tags with suffix like x.x.x-[SPECIALIZED_TAG_SUFFIX]):
 
 * `x.x.x-cloudrun` - image optimized to run on Cloud Run
+* `x.x.x-openfaas` - image optimized to run on OpenFaas
 
 #### Build
 
@@ -141,3 +148,16 @@ Use [Semantic Versioning 2.0.0](https://semver.org/) for tagging new versions of
 * (optional) `gcloud auth configure-docker`
 * `docker tag long-running-logger eu.gcr.io/[PROJECT_ID]/long-running-logger:[NEW_SEMVER_TAG]` OR `docker tag long-running-logger-[SPECIALIZED_TAG_SUFFIX] eu.gcr.io/[PROJECT_ID]/long-running-logger:[NEW_SEMVER_TAG_WITH_SPECIALIZED_SUFFIX]`
 * `docker push eu.gcr.io/[PROJECT_ID]/long-running-logger:[NEW_SEMVER_TAG]`
+
+#### Build, push and deploy to OpenFaaS on GKE
+
+First, change [SPECIALIZED_TAG_SUFFIX] to new one in `images/long-running-logger/openfass/long-running-logger.yaml`
+
+Then...
+
+```bash
+cd images/long-running-logger/openfass
+faas-cli build -f long-running-logger.yml
+faas-cli push -f long-running-logger.yml
+faas-cli deploy -f long-running-logger.yml
+```
