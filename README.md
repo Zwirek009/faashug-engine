@@ -37,7 +37,7 @@ gcloud container clusters get-credentials [PROJECT_ID]-gke --zone=[ZONE]
 
 ### 5. (optional, 4. required) Configure OpenFaaS environment on the GKE cluster
 
-Instructions below based on [official OpenFaaS documentation](https://github.com/openfaas/workshop/blob/master/lab1b.md#run-on-gke-google-kubernetes-engine)
+Instructions below based on [official OpenFaaS workshop](https://github.com/openfaas/workshop/blob/master/lab1b.md#run-on-gke-google-kubernetes-engine)
 
 ```bash
 kubectl create clusterrolebinding "cluster-admin-$(whoami)" \
@@ -76,6 +76,19 @@ faas-cli list
 ```
 
 You can also use the same credentials to access OpenFaaS UI through web browser, using `[EXTERNAL-IP]` and credentials used above.
+
+### 6. (optional, 4. and 5. required) Setup Grafana for OpenFaaS Monitoring
+
+Instructions below based on [official OpenFaaS workshop](https://github.com/openfaas/workshop/blob/master/lab2.md#kubernetes)
+
+```bash
+kubectl -n openfaas run \
+--image=stefanprodan/faas-grafana:4.6.3 \
+--port=3000 \
+grafana
+```
+
+To access Grafana, run port-forwarding command and access Grafana OpenFaaS Dashboard through your browser (`http://127.0.0.1:3000/dashboard/db/openfaas`, login using `username`/`password`: `admin`/`admin`).
 
 ## Docker Images
 
