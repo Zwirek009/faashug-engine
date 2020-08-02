@@ -24,7 +24,7 @@ variable "container_registry_location" {
 }
 
 variable "cloudrun_should_apply" {
-  default     = true
+  default     = false
   description = "Should Cloud Run (fully managed) services be applied"
 }
 

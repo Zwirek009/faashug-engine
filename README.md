@@ -23,11 +23,11 @@ gcloud auth application-default login
 
 ### 3. Apply changes to GCP
 
-* (optional) Modify variables in `variables.tf` and `Makefile`
+* (optional) Modify variables in `variables.tf` and `Makefile` (especially `...should_apply` flags specifying if certain resources should be deployed)
 * (first use setup) Run `make terraform-init`
 * Use Makefile (eg. `make terraform-apply`) to do actions instead of bare metal `terraform` actions
 
-### 4. (optional) Configure kubectl to use GKE zonal cluster
+### 4. (optional, `gke_should_apply` tf flag deployed with `true` required) Configure kubectl to use GKE zonal cluster
 
 Update command below using with your terraform outputs (eg. run `make terraform-output` to get them).
 
