@@ -1,14 +1,21 @@
 terraform {
   required_version = "~> 0.12.25"
   required_providers {
-    google = "~> 3.23"
+    google = "~> 3.32"
+    google-beta = "~> 3.32"
   }
   backend "gcs" {
     prefix = "faashug-engine"
   }
 }
 
+# default if not specified
 provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+
+provider "google-beta" {
   project = var.project_id
   region  = var.region
 }
@@ -64,6 +71,8 @@ resource "google_compute_subnetwork" "gke" {
 
 # [GKE] Cluster definition 
 resource "google_container_cluster" "primary" {
+  provider = google-beta
+
   count = var.gke_should_apply ? 1 : 0
 
   name     = "${var.project_id}-gke"
@@ -74,6 +83,10 @@ resource "google_container_cluster" "primary" {
 
   network    = google_compute_network.vpc[count.index].name
   subnetwork = google_compute_subnetwork.gke[count.index].name
+
+  release_channel {
+    channel = "REGULAR"
+  }
 
   master_auth {
     username = var.gke_username
