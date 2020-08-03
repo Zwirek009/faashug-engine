@@ -12,6 +12,7 @@ Backend for my master's thesis project
 * `kubectl` installed
 * `arkade` installed (`curl -SLsf https://dl.get-arkade.dev/ | sudo sh` on MacOS / Linux)
 * `faas-cli` installed (`curl -sSL https://cli.openfaas.com | sudo -E sh` on MacOS / Linux)
+* `istioctl` installed
 * Project with billing on GCP created
 * Project set as current/default in `gcloud` (verify using `gcloud config list`)
 
@@ -35,7 +36,7 @@ Update command below using with your terraform outputs (eg. run `make terraform-
 gcloud container clusters get-credentials [PROJECT_ID]-gke --zone=[ZONE]
 ```
 
-### 5. (optional, 4. required) Configure OpenFaaS environment on the GKE cluster
+### 5. [OpenFaaS] (optional, 4. required) Configure OpenFaaS environment on the GKE cluster
 
 Instructions below based on [official OpenFaaS workshop](https://github.com/openfaas/workshop/blob/master/lab1b.md#run-on-gke-google-kubernetes-engine)
 
@@ -83,7 +84,7 @@ faas-cli list
 
 You can also use the same credentials to access OpenFaaS UI through web browser, using `[EXTERNAL-IP]` and credentials used above.
 
-### 6. (optional, 4. and 5. required) Setup Grafana for OpenFaaS Monitoring
+### 6. [OpenFaaS] (optional, 4. and 5. required) Setup Grafana for OpenFaaS Monitoring
 
 Instructions below based on [official OpenFaaS workshop](https://github.com/openfaas/workshop/blob/master/lab2.md#kubernetes)
 
@@ -95,6 +96,43 @@ grafana
 ```
 
 To access Grafana, run port-forwarding command and access Grafana OpenFaaS Dashboard through your browser (`http://127.0.0.1:3000/dashboard/db/openfaas`, login using `username`/`password`: `admin`/`admin`).
+
+### 5. [Knative] (optional, 4. required) Configure Knative environment on the GKE cluster
+
+INFO: Use at least `n1-standard-4` for GKE single-node cluster to be able to run Knative environment.
+
+Instructions below based on [official Knative documentation](https://knative.dev/docs/install/any-kubernetes-cluster/)
+
+Install `Serving` componnent:
+
+```bash
+kubectl apply --filename https://github.com/knative/serving/releases/download/v0.16.0/serving-crds.yaml
+kubectl apply --filename https://github.com/knative/serving/releases/download/v0.16.0/serving-core.yaml
+istioctl manifest apply -f istio-minimal-operator.yaml
+kubectl apply --filename https://github.com/knative/net-istio/releases/download/v0.16.0/release.yaml
+kubectl apply --filename https://github.com/knative/serving/releases/download/v0.16.0/serving-default-domain.yaml
+```
+
+To verify installation of `Serving`, check if all below show a `STATUS` of `Running` or `Completed`:
+
+```bash
+kubectl get pods --namespace knative-serving
+```
+
+Install `Eventing` componnent:
+
+```bash
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.16.0/eventing-crds.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.16.0/eventing-core.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.16.0/in-memory-channel.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.16.0/mt-channel-broker.yaml
+```
+
+To verify installation of `Eventing`, check if all below show a `STATUS` of `Running` or `Completed`:
+
+```bash
+kubectl get pods --namespace knative-eventing
+```
 
 ## Docker Images
 

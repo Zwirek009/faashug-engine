@@ -51,7 +51,7 @@ variable "gke_num_nodes" {
 variable "gke_machine_type" {
   type = string
   default     = "n1-standard-1"
-  description = "number of gke nodes"
+  description = "number of gke nodes (n1-standard-1 minimal for OpenFaas, n1-standard-4 for Knative)"
 }
 
 variable "cloudrun_region" {
