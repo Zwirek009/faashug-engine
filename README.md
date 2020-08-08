@@ -96,7 +96,13 @@ kubectl -n openfaas run \
 grafana
 ```
 
-To access Grafana, run port-forwarding command and access Grafana OpenFaaS Dashboard through your browser (`http://127.0.0.1:3000/dashboard/db/openfaas`, login using `username`/`password`: `admin`/`admin`).
+To access Grafana, run port-forwarding command...
+
+```bash
+kubectl port-forward pod/grafana 3000:3000 -n openfaas
+```
+
+...and access Grafana OpenFaaS Dashboard through your browser (`http://127.0.0.1:3000/dashboard/db/openfaas`, login using `username`/`password`: `admin`/`admin`).
 
 ### 5. [Knative] (optional, 4. required) Configure Knative environment on the GKE cluster
 
