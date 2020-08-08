@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-defaults
+  namespace: knative-serving
+  labels:
+    serving.knative.dev/release: "v0.16.0"
+  annotations:
+    knative.dev/example-checksum: 2defca8d
+data:
+  revision-timeout-seconds: "100"
+  max-revision-timeout-seconds: "3600"

@@ -10,9 +10,10 @@ Backend for my master's thesis project
 * `gcloud` installed
 * `docker` installed
 * `kubectl` installed
-* `arkade` installed (`curl -SLsf https://dl.get-arkade.dev/ | sudo sh` on MacOS / Linux)
-* `faas-cli` installed (`curl -sSL https://cli.openfaas.com | sudo -E sh` on MacOS / Linux)
-* `istioctl` installed
+* [OpenFaas] `arkade` installed (`curl -SLsf https://dl.get-arkade.dev/ | sudo sh` on MacOS / Linux)
+* [OpenFaaS] `faas-cli` installed (`curl -sSL https://cli.openfaas.com | sudo -E sh` on MacOS / Linux)
+* [Knative] `istioctl` installed
+* [Knative] `kn` (`Knative CLI`) installed
 * Project with billing on GCP created
 * Project set as current/default in `gcloud` (verify using `gcloud config list`)
 
@@ -144,7 +145,7 @@ Container for testing long-lunning task execution. Container executes script for
 
 Specialized image version tags (tags with suffix like x.x.x-[SPECIALIZED_TAG_SUFFIX]):
 
-* `x.x.x-cloudrun` - image optimized to run on Cloud Run
+* `x.x.x-cloudrun` `x.x.x-knative` - image optimized to run on Cloud Run or Knative (same image settings)
 * `x.x.x-openfaas` - image optimized to run on OpenFaas
 
 #### Build
@@ -198,4 +199,11 @@ cd images/long-running-logger/openfass
 faas-cli build -f long-running-logger.yml
 faas-cli push -f long-running-logger.yml
 faas-cli deploy -f long-running-logger.yml
+```
+
+#### Deploy to Knative on GKE
+
+```bash
+cd images/long-running-logger/knative
+kubectl apply --filename long-running-logger.yaml
 ```

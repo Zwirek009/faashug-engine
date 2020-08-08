@@ -1,0 +1,14 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: long-running-logger
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: eu.gcr.io/faashug-dev/long-running-logger:2.0.2-knative
+          env:
+            - name: EXECUTION_MINUTES 
+              value: "31"
+      timeoutSeconds: 3600
