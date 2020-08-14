@@ -50,7 +50,8 @@ kubectl create clusterrolebinding "cluster-admin-$(whoami)" \
 Command below installs OpenFaaS infra based on official OpenFaaS Helm chart. Timeout numbers can be changed as you wish, but remember that `upstreamTimeout` must be smaller than others. You can also rerun just the command to update timeout values on existing environment.
 
 ```bash
-arkade install openfaas --set gateway.readTimeout="101m" --set gateway.writeTimeout="101m" --set gateway.upstreamTimeout="100m" --load-balancer
+arkade install openfaas --set gateway.readTimeout="101m" --set gateway.writeTimeout="101m" \
+--set gateway.upstreamTimeout="100m" --load-balancer
 ```
 
 Wait until command below reports success:
