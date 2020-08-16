@@ -8,5 +8,4 @@ metadata:
   annotations:
     knative.dev/example-checksum: 2defca8d
 data:
-  revision-timeout-seconds: "100"
   max-revision-timeout-seconds: "3600"
